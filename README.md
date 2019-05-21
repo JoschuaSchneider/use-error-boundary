@@ -1,5 +1,7 @@
 # React useErrorBoundary() hook
 
+![build status](https://travis-ci.org/JoschuaSchneider/use-error-boundary.svg?branch=master)
+
 This react hook provides a ErrorBoundary class and the error state of the error boundary.
 
 The ErrorBoundary is implemented using classes (as there is no hook-based componentDidCatch implementation yet).
