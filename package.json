@@ -4,10 +4,13 @@
   "description": "React hook for using error boundaries",
   "main": "lib/index.js",
   "scripts": {
-    "build": "babel src --out-dir lib",
+    "build": "babel src --ignore src/__tests__ --out-dir lib",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest src",
+    "prepare": "npm run build",
+    "preversion": "npm test && npm run lint",
+    "prepublishOnly": "npm test && npm run lint"
   },
   "repository": {
     "type": "git",
