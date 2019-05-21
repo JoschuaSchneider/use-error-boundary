@@ -1,11 +1,13 @@
 # use-error-boundary
+
 ![npm version](https://img.shields.io/npm/v/use-error-boundary.svg)
 ![build status](https://travis-ci.org/JoschuaSchneider/use-error-boundary.svg?branch=master)
 ![license](https://img.shields.io/npm/l/use-error-boundary.svg)
 
-This react hook provides a ErrorBoundary class and the error state of the error boundary.
+A **react hook** for using error boundaries in your functional components.
 
-The ErrorBoundary is implemented using classes (as there is no hook-based componentDidCatch implementation yet).
+
+It lets you keep track of the error state of child components, by wrapping them in a provided `ErrorBoundary` component.
 
 ### Installation
 
@@ -13,31 +15,66 @@ The ErrorBoundary is implemented using classes (as there is no hook-based compon
 npm i use-error-boundary
 ```
 
-### Functionality
+## Examples and usage
 
-The hook provides an `ErrorBoundary` class, that accepts children and renders them.
-In case of an exception, the `ErrorBoundary` will render `null` and the hook will update its state.
+Import the hook:
+```javascript
+// Named
+import { useErrorBoundary } from 'use-error-boundary'
+// Default
+import useErrorBoundary from 'use-error-boundary'
+```
 
-This lets you implement an error screen depending on the Status of the Error boundary, using function components and hooks!
-
-### Usage
+Use the hook in your react component,
+it provides you with this object:
 
 ```javascript
-import React from "react"
-import { useErrorBoundary } from "use-error-boundary"
+const MyComponent = () => {
 
-const myComponent = () => {
-  const { ErrorBoundary, didCatch, error, errorInfo } = useErrorBoundary()
+  const {
+    ErrorBoundary, // class - The react component to wrap your children in. This WILL NOT CHANGE
+    didCatch, // boolean - Whether the ErrorBoundary catched something
+    error, // null or the error
+    errorInfo // null or the error info as described in the react docs
+  } = useErrorBoundary()
 
-  if (didCatch) return <h1>Something went wrong</h1>
+  ...
+  
+}
+```
 
+Wrap your components in the `ErrorBoundary`:
+
+```javascript
+
+const JustRenderMe = () => {
+  throw new Error('💥')
+}
+
+const MyComponent = () => {
+
+  ...
+
+  /**
+   * The ErrorBoundary renders its children directly,
+   * when a component throws, the ErrorBoundary will return null from its render method.
+   * 
+   * See TODO section :)
+   */
   return (
     <ErrorBoundary>
-      <SomeChildren />
+      <JustRenderMe />
     </ErrorBoundary>
   )
 }
 ```
+
+## TODO
+
+ - [ ] Extend default ErrorBoundary component to render a provided component when there is an error
+ - [ ] Passing own component as ErrorBoundary and wrap it
+ - [ ] Change `createErrorBoundaryClass` to pass `onDidCatch` as prop (HOC)
+ - [ ] Cleanup tests
 
 ## Contributing
 
