@@ -1,0 +1,63 @@
+{
+  "name": "use-error-boundary",
+  "version": "1.0.0",
+  "description": "React hook for using error boundaries",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "babel src --out-dir lib",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoschuaSchneider/use-error-boundary.git"
+  },
+  "keywords": [
+    "react",
+    "hooks",
+    "error-boundaries",
+    "use"
+  ],
+  "author": "Joschua Schneider",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JoschuaSchneider/use-error-boundary/issues"
+  },
+  "homepage": "https://github.com/JoschuaSchneider/use-error-boundary#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "@types/jest": "^24.0.13",
+    "babel-jest": "^24.8.0",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.13.1",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-config-prettier-standard": "^2.0.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-node": "^9.0.1",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-standard": "^4.0.0",
+    "jest": "^24.8.0",
+    "prettier": "^1.17.1",
+    "react-dom": "^16.8.6",
+    "react-test-renderer": "^16.8.6",
+    "react-testing-library": "^7.0.1"
+  },
+  "dependencies": {
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/setupTests.js"
+    ]
+  }
+}
