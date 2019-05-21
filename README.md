@@ -1,6 +1,6 @@
 # use-error-boundary
 
-![npm version](https://img.shields.io/npm/v/use-error-boundary.svg)
+[![npm version](https://img.shields.io/npm/v/use-error-boundary.svg)](https://www.npmjs.com/package/use-error-boundary)
 ![build status](https://travis-ci.org/JoschuaSchneider/use-error-boundary.svg?branch=master)
 ![license](https://img.shields.io/npm/l/use-error-boundary.svg)
 
@@ -39,7 +39,7 @@ const MyComponent = () => {
   } = useErrorBoundary()
 
   ...
-  
+
 }
 ```
 
