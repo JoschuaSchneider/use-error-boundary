@@ -1,7 +1,11 @@
 import React from "react"
 import { shallow, mount } from "enzyme"
+import sinon from "sinon"
 
 import { useErrorBoundary } from "../"
+
+import { createWrappedErrorBoundary } from "../utils/create-wrapped-error-boundary"
+import { ErrorBoundary as ErrorBoundaryClass } from "../ErrorBoundary"
 
 function HookDataWrapper({ hook }) {
   const hookData = hook ? hook() : null
@@ -17,7 +21,7 @@ function getHookData() {
   return hookdata
 }
 
-describe("useErrorBoundary hook", () => {
+describe("useErrorBoundary() hook", () => {
   it("should render in a function component without crashing", () => {
     const wrapper = shallow(<HookDataWrapper hook={useErrorBoundary} />)
 
@@ -33,87 +37,147 @@ describe("useErrorBoundary hook", () => {
     expect(errorInfo).toBeNull()
   })
 
-  it("should return correct state after catch and not throw", () => {
-    function BadChild() {
-      return null
-    }
+  describe("createWrappedErrorBoundary() factory", () => {
+    it("should return a function", () => {
+      const wrappedFunction = createWrappedErrorBoundary({
+        onDidCatch: () => {}
+      })
 
-    function HookDataWrapperWithBoundary() {
-      const { ErrorBoundary, ...state } = useErrorBoundary()
+      expect(typeof wrappedFunction).toBe("function")
+    })
 
-      return (
-        <>
-          <div hookdata={{ ErrorBoundary, ...state }} />
-          <ErrorBoundary>
-            <BadChild />
-          </ErrorBoundary>
-        </>
+    it("should not call onDidCatch", () => {
+      const onDidCatch = sinon.spy()
+
+      createWrappedErrorBoundary({
+        onDidCatch
+      })
+
+      expect(onDidCatch.notCalled).toBeTruthy()
+    })
+
+    it("should render <ErrorBoundary /> and pass onDidCatch to it", () => {
+      const onDidCatch = function() {}
+
+      const WrappedErrorClass = createWrappedErrorBoundary({
+        onDidCatch
+      })
+
+      const wrappedErrorBoundary = shallow(<WrappedErrorClass />)
+
+      const errorBoundary = wrappedErrorBoundary.find("ErrorBoundary")
+
+      expect(errorBoundary.exists()).toBeTruthy()
+      expect(errorBoundary.prop("onDidCatch")).toBe(onDidCatch)
+    })
+
+    it("should pass props on Wrapper to <ErrorBoundary />", () => {
+      const onDidCatch = function() {}
+
+      const WrappedErrorClass = createWrappedErrorBoundary({
+        onDidCatch
+      })
+
+      const wrappedErrorBoundary = shallow(
+        <WrappedErrorClass someprop="somevalue" />
       )
-    }
 
-    const dataWrapperWithBoundary = shallow(<HookDataWrapperWithBoundary />)
+      const errorBoundary = wrappedErrorBoundary.find("ErrorBoundary")
 
-    function getCurrentHookData() {
-      return dataWrapperWithBoundary.find("div").props().hookdata
-    }
-
-    const errorBoundary = dataWrapperWithBoundary
-      .find("ErrorBoundary")
-      .shallow()
-
-    const simulatedError = new Error("Simulated error")
-
-    errorBoundary.find(BadChild).simulateError(simulatedError)
-
-    const { didCatch, error, errorInfo } = getCurrentHookData()
-
-    expect(didCatch).toBe(true)
-    expect(error).toBe(simulatedError)
-    expect(errorInfo).not.toBeNull()
+      expect(errorBoundary.exists()).toBeTruthy()
+      expect(errorBoundary.prop("someprop")).toBe("somevalue")
+    })
   })
 
-  describe("ErrorBoundary component returned by hook", () => {
+  describe("<ErrorBoundary /> class", () => {
     it("should render without crashing", () => {
-      const { ErrorBoundary } = getHookData()
-
-      const errorBoundary = mount(
-        <ErrorBoundary>
-          <div>children</div>
-        </ErrorBoundary>
-      )
+      const errorBoundary = mount(<ErrorBoundaryClass onDidCatch={() => {}} />)
 
       expect(errorBoundary.exists()).toBeTruthy()
     })
 
     it("should initialize its own state", () => {
-      const { ErrorBoundary } = getHookData()
-
-      const errorBoundary = mount(
-        <ErrorBoundary>
-          <div>children</div>
-        </ErrorBoundary>
-      )
+      const errorBoundary = mount(<ErrorBoundaryClass onDidCatch={() => {}} />)
 
       expect(errorBoundary.state("hasError")).toEqual(false)
+      expect(errorBoundary.state("error")).toEqual(null)
     })
 
-    it("should catch errors from children and not render children", () => {
-      const { ErrorBoundary } = getHookData()
-
-      function Stub() {
-        return null
+    it("should return components in render() function", () => {
+      function Child() {
+        return "child"
       }
-
       const errorBoundary = mount(
-        <ErrorBoundary>
-          <Stub />
-        </ErrorBoundary>
+        <ErrorBoundaryClass onDidCatch={() => {}} render={() => <Child />} />
       )
 
-      errorBoundary.find(Stub).simulateError(new Error("Simulated Error"))
+      expect(errorBoundary.find(Child).exists()).toBeTruthy()
+    })
+
+    it("should return its children", () => {
+      function Child() {
+        return "child"
+      }
+      const errorBoundary = mount(
+        <ErrorBoundaryClass onDidCatch={() => {}}>
+          <Child />
+        </ErrorBoundaryClass>
+      )
+
+      expect(errorBoundary.find(Child).exists()).toBeTruthy()
+    })
+
+    it("should catch errors in children, update state and call onDidCatch once with error", () => {
+      function BadChild() {
+        return "bad child"
+      }
+
+      const onDidCatch = sinon.spy()
+
+      const errorBoundary = shallow(
+        <ErrorBoundaryClass onDidCatch={onDidCatch}>
+          <BadChild />
+        </ErrorBoundaryClass>
+      )
+
+      const simulatedError = new Error("simulated")
+
+      errorBoundary.find(BadChild).simulateError(simulatedError)
+
+      expect(errorBoundary.exists()).toBeTruthy()
+      expect(errorBoundary.find(BadChild).exists()).toBeFalsy()
+      expect(onDidCatch.callCount).toEqual(1)
+      expect(onDidCatch.calledWith(simulatedError)).toBeTruthy()
 
       expect(errorBoundary.state("hasError")).toEqual(true)
-      expect(errorBoundary.children()).toEqual({})
+      expect(errorBoundary.state("error")).toEqual(simulatedError)
+    })
+
+    it("should render renderError() when catching", () => {
+      function BadChild() {
+        return "bad child"
+      }
+
+      function ErrorChild() {
+        return "this shows when catched"
+      }
+
+      const errorBoundary = shallow(
+        <ErrorBoundaryClass
+          onDidCatch={() => {}}
+          renderError={() => <ErrorChild />}
+        >
+          <BadChild />
+        </ErrorBoundaryClass>
+      )
+
+      const simulatedError = new Error("simulated")
+
+      errorBoundary.find(BadChild).simulateError(simulatedError)
+
+      expect(errorBoundary.exists()).toBeTruthy()
+      expect(errorBoundary.find(BadChild).exists()).toBeFalsy()
+      expect(errorBoundary.find(ErrorChild).exists()).toBeTruthy()
     })
   })
 })
