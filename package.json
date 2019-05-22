@@ -52,7 +52,8 @@
     "prettier": "^1.17.1",
     "react-dom": "^16.8.6",
     "react-test-renderer": "^16.8.6",
-    "react-testing-library": "^7.0.1"
+    "react-testing-library": "^7.0.1",
+    "sinon": "^7.3.2"
   },
   "dependencies": {
     "prop-types": "^15.7.2",
