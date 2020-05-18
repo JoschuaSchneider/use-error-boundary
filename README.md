@@ -110,7 +110,7 @@ These are the properties of the returned Object:
 
 ## Why should I use this?
 
-React does not provide a way to catch errors within the same component and you have to handle that in a class with special lifecycle methods.
+React does not provide a way to catch errors within the same functional component and you have to handle that in a class Component with special lifecycle methods.
 If you are new to ErrorBoundaries, I recommend implementing this yourself!
 
 This packages purpose is to provide an easy drop in replacement for projects that are being migrated to hooks and to pull the error presentation out of the boundary itself by putting it on the same level you are catching the errors.
