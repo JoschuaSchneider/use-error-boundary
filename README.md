@@ -52,30 +52,23 @@ if it catches an error the hook provides you with the changed state and the boun
 If you want the boundary to also render your error display, you can [use it with render props](#use-with-render-props)
 
 ```javascript
-
 const JustRenderMe = () => {
-  throw new Error('💥')
+  throw new Error("💥")
 }
 
 const MyComponent = () => {
-
-  const {
-    ErrorBoundary,
-    didCatch,
-    error
-  } = useErrorBoundary()
-
+  const { ErrorBoundary, didCatch, error } = useErrorBoundary()
 
   return (
-    {
-      didCatch ? (
+    <>
+      {didCatch ? (
         <p>An error has been catched: {error.message}</p>
       ) : (
         <ErrorBoundary>
           <JustRenderMe />
         </ErrorBoundary>
-      )
-    }
+      )}
+    </>
   )
 }
 ```
