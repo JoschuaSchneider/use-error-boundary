@@ -1,6 +1,8 @@
 language: node_js
 node_js:
   - "10"
+before_install:
+- npm install react
 script:
   - npm run lint
   - npm run test
