@@ -1,6 +1,6 @@
 {
   "name": "use-error-boundary",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "React hook for using error boundaries",
   "main": "lib/index.js",
   "scripts": {
