@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { act, render, screen, fireEvent } from "@testing-library/react"
 import useErrorBoundary from "../index"
-import { UseErrorBoundaryOptions } from "../../lib"
+import { UseErrorBoundaryOptions } from "../use-error-boundary"
 import { renderHook } from "@testing-library/react-hooks"
 
 /**
