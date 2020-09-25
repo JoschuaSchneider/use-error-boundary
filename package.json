@@ -1,16 +1,19 @@
 {
   "name": "use-error-boundary",
-  "version": "1.2.4",
+  "version": "2.0.0",
   "description": "React hook for using error boundaries",
+  "source": "src/index.ts",
   "main": "lib/index.js",
+  "module": "lib/index.module.js",
+  "unpkg": "lib/index.umd.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "/lib"
+  ],
   "scripts": {
-    "build": "babel src --ignore src/__tests__ --out-dir lib",
-    "lint": "eslint src",
-    "lint:fix": "eslint src --fix",
-    "test": "jest src",
-    "prepare": "npm run build",
-    "preversion": "npm test && npm run lint",
-    "prepublishOnly": "npm test && npm run lint"
+    "build": "rimraf lib && microbundle -f cjs,umd src/index.cjs.ts && microbundle -f es,modern src/index.ts",
+    "prepublishOnly": "npm test && npm run build",
+    "test": "jest src"
   },
   "repository": {
     "type": "git",
@@ -20,6 +23,7 @@
     "react",
     "hooks",
     "error-boundaries",
+    "error-boundary",
     "use"
   ],
   "author": "Joschua Schneider",
@@ -29,42 +33,29 @@
   },
   "homepage": "https://github.com/JoschuaSchneider/use-error-boundary#readme",
   "devDependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.4",
-    "@babel/node": "^7.2.2",
-    "@babel/preset-env": "^7.4.4",
-    "@babel/preset-react": "^7.0.0",
-    "@types/jest": "^24.0.13",
-    "babel-jest": "^24.8.0",
-    "enzyme": "^3.9.0",
-    "enzyme-adapter-react-16": "^1.13.1",
-    "eslint": "^5.16.0",
-    "eslint-config-prettier": "^4.3.0",
-    "eslint-config-prettier-standard": "^2.0.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.17.2",
-    "eslint-plugin-node": "^9.0.1",
-    "eslint-plugin-prettier": "^3.1.0",
-    "eslint-plugin-promise": "^4.1.1",
-    "eslint-plugin-react": "^7.13.0",
-    "eslint-plugin-standard": "^4.0.0",
-    "jest": "^24.8.0",
-    "prettier": "^1.17.1",
+    "@babel/core": "^7.11.6",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.10.4",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.0.4",
+    "@testing-library/react-hooks": "^3.4.1",
+    "@types/jest": "^26.0.14",
+    "@types/react": "^16.9.49",
+    "@types/react-dom": "^16.9.8",
+    "eslint": "^7.9.0",
+    "jest": "^26.4.2",
+    "microbundle": "^0.12.3",
     "react": "^16.13.1",
-    "react-dom": "^16.8.6",
-    "react-test-renderer": "^16.8.6",
-    "react-testing-library": "^7.0.1",
-    "sinon": "^7.3.2"
+    "react-dom": "^16.13.1",
+    "react-test-renderer": "^16.13.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.4.0",
+    "typescript": "^4.0.3"
   },
   "dependencies": {
     "prop-types": "^15.7.2"
   },
   "peerDependencies": {
-    "react": "^16.8.6"
-  },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "<rootDir>/setupTests.js"
-    ]
+    "react": "^16.13.1"
   }
 }
