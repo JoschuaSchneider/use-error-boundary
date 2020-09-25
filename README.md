@@ -16,6 +16,13 @@ It lets you keep track of the error state of child components, by wrapping them 
 npm i use-error-boundary
 ```
 
+### Breaking changes in `2.x`
+
+If you are upgrading from version `1.x` please make sure you are not using the `errorInfo` object.
+The hook itself and the `renderError` callback no longer provide this object.
+
+For advanced use, please refer to [Custom handling of error and errorInfo](#custom-handling-of-error-and-errorinfo).
+
 ## Examples and usage
 
 Import the hook:
@@ -35,8 +42,7 @@ const MyComponent = () => {
   const {
     ErrorBoundary,
     didCatch,
-    error,
-    errorInfo
+    error
   } = useErrorBoundary()
 
   ...
@@ -85,9 +91,21 @@ Optionally, you can pass a `render` and `renderError` function to render the com
 return (
   <ErrorBoundary
     render={() => <SomeChild />}
-    renderError={({ error, errorInfo }) => <MyErrorComponent error={error} />}
+    renderError={({ error }) => <MyErrorComponent error={error} />}
   />
 )
+```
+
+## Custom handling of `error` and `errorInfo`
+
+The hook now accepts an `options` object that you can pass a `onDidCatch` callback that gets called when the ErrorBoundary catches an error.
+
+```js
+useErrorBoundary({
+  onDidCatch: (error, errorInfo) => {
+    // For logging/reporting
+  },
+})
 ```
 
 ## Returned Properties
@@ -99,7 +117,8 @@ These are the properties of the returned Object:
 | `ErrorBoundary` | React Component        | Special error boundary component that provides state changes to the hook. <br>:warning: **You need to use this as the error boundary! Otherwise, the state will not update when errors are catched!** <br> The ErrorBoundary is **guaranteed referential equality** across rerenders. |
 | `didCatch`      | Boolean                | `true` if an error has been catched                                                                                                                                                                                                                                                   |
 | `error`         | Error Object or `null` | The error catched by the Boundary                                                                                                                                                                                                                                                     |
-| `errorInfo`     | Object or `null`       | Error Info from the boundary ([React docs](https://reactjs.org/docs/error-boundaries.html))                                                                                                                                                                                           |
+
+If you are searching for the `errorInfo` property, please read [Breaking Changes in 2.x](#breaking-changes-in-2x).
 
 ## Why should I use this?
 
@@ -110,6 +129,6 @@ This packages purpose is to provide an easy drop in replacement for projects tha
 
 ## Contributing
 
-Contributions are welcome, as this is my **first properly published npm package**.
+Contributions are always welcome.
 
-Feel free to open issues or pull requests! I will review them as fast as possible.
+Feel free to open issues or pull requests!
