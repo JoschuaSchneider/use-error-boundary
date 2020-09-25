@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
+    "lib": ["ES2019"],
+    "module": "commonjs",
+    "target": "ES2019",
     "jsx": "react",
     "strict": true,
     "esModuleInterop": true,
