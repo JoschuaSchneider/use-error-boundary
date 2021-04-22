@@ -68,7 +68,7 @@ const MyComponent = () => {
   return (
     <>
       {didCatch ? (
-        <p>An error has been catched: {error.message}</p>
+        <p>An error has been caught: {error.message}</p>
       ) : (
         <ErrorBoundary>
           <JustRenderMe />
@@ -114,9 +114,9 @@ These are the properties of the returned Object:
 
 | Property        | Type                   | Description                                                                                                                                                                                                                                                                           |
 | --------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ErrorBoundary` | React Component        | Special error boundary component that provides state changes to the hook. <br>:warning: **You need to use this as the error boundary! Otherwise, the state will not update when errors are catched!** <br> The ErrorBoundary is **guaranteed referential equality** across rerenders. |
-| `didCatch`      | Boolean                | `true` if an error has been catched                                                                                                                                                                                                                                                   |
-| `error`         | Error Object or `null` | The error catched by the Boundary                                                                                                                                                                                                                                                     |
+| `ErrorBoundary` | React Component        | Special error boundary component that provides state changes to the hook. <br>:warning: **You need to use this as the error boundary! Otherwise, the state will not update when errors are caught!** <br> The ErrorBoundary is **guaranteed referential equality** across rerenders. |
+| `didCatch`      | Boolean                | `true` if an error has been caught                                                                                                                                                                                                                                               |
+| `error`         | Error Object or `null` | The error caught by the Boundary                                                                                                                                                                                                                                                     |
 
 If you are searching for the `errorInfo` property, please read [Breaking Changes in 2.x](#breaking-changes-in-2x).
 
