@@ -44,7 +44,7 @@
     "@types/react-dom": "^16.9.8",
     "eslint": "^7.9.0",
     "jest": "^26.4.2",
-    "microbundle": "^0.12.3",
+    "microbundle": "^0.13.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-test-renderer": "^16.13.1",
