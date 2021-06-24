@@ -42,7 +42,8 @@ const MyComponent = () => {
   const {
     ErrorBoundary,
     didCatch,
-    error
+    error,
+    reset
   } = useErrorBoundary()
 
   ...
@@ -112,11 +113,12 @@ useErrorBoundary({
 
 These are the properties of the returned Object:
 
-| Property        | Type                   | Description                                                                                                                                                                                                                                                                           |
-| --------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Property        | Type                   | Description                                                                                                                                                                                                                                                                          |
+| --------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `ErrorBoundary` | React Component        | Special error boundary component that provides state changes to the hook. <br>:warning: **You need to use this as the error boundary! Otherwise, the state will not update when errors are caught!** <br> The ErrorBoundary is **guaranteed referential equality** across rerenders. |
-| `didCatch`      | Boolean                | `true` if an error has been caught                                                                                                                                                                                                                                               |
+| `didCatch`      | Boolean                | `true` if an error has been caught                                                                                                                                                                                                                                                   |
 | `error`         | Error Object or `null` | The error caught by the Boundary                                                                                                                                                                                                                                                     |
+| `reset`         | Function               | A function to reset the error state of the hook and the boundary. This replaces the error boundary and forces react to newly render it.                                                                                                                                              |
 
 If you are searching for the `errorInfo` property, please read [Breaking Changes in 2.x](#breaking-changes-in-2x).
 
