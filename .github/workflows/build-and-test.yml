@@ -2,7 +2,9 @@
 
 name: Build and test the package
 
-on: [push]
+on:
+  - push
+  - pull_request
 
 jobs:
   build:
