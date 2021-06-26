@@ -65,6 +65,7 @@ export class ErrorBoundary extends PureComponent<
   componentDidCatch(error: any, errorInfo: any) {
     return this.props.onDidCatch(error, errorInfo)
   }
+
   /**
    * Render children or fallback ui depending on the error state.
    *

@@ -1,4 +1,4 @@
-import React, { useRef, useReducer } from "react"
+import React, { useRef, useReducer, useCallback } from "react"
 
 import {
   createErrorBoundary,
@@ -12,10 +12,11 @@ export interface ErrorState {
 
 export interface UseErrorBoundaryState extends ErrorState {
   ErrorBoundary: UseErrorBoundaryWrapper
+  reset: () => void
 }
 
 interface StateAction {
-  type: "catch"
+  type: "catch" | "reset"
   error?: any | null
 }
 
@@ -50,10 +51,14 @@ const useErrorBoundaryReducer: UseErrorBoundaryReducer = (state, action) => {
     // The component did catch, update state
     case "catch":
       return {
-        //...state,
         didCatch: true,
         // Pass the values from action.error
         error: action.error,
+      }
+    case "reset":
+      return {
+        didCatch: false,
+        error: null,
       }
     // Unknown action, return state
     default:
@@ -76,6 +81,21 @@ function useErrorBoundary(
   // Create ref for wrapped ErrorBoundary class
   const errorBoundaryWrapperRef = useRef<UseErrorBoundaryWrapper | null>(null)
 
+  // Create a new wrapped boundary
+  function createWrappedErrorBoundary() {
+    // Create new wrapped ErrorBoundary class with onDidCatch callback
+    return createErrorBoundary((err, errorInfo) => {
+      // Dispatch action in case of an error
+      dispatch({
+        type: "catch",
+        error: err,
+      })
+
+      // call onDidCatch if provided by user
+      if (options && options.onDidCatch) options.onDidCatch(err, errorInfo)
+    })
+  }
+
   // Get the current ref value or initialize it with a new wrapped ErrorBoundary
   function getWrappedErrorBoundary() {
     // Get current ref value
@@ -86,30 +106,26 @@ function useErrorBoundary(
       return errorBoundaryWrapper
     }
 
-    // Create new wrapped ErrorBoundary class with onDidCatch callback
-    errorBoundaryWrapper = createErrorBoundary((err, errorInfo) => {
-      // Dispatch action in case of an error
-      dispatch({
-        type: "catch",
-        error: err,
-      })
-
-      // call onDidCatch if provided by user
-      if (options && options.onDidCatch) options.onDidCatch(err, errorInfo)
-    })
-
-    // Update the ref with new component
-    errorBoundaryWrapperRef.current = errorBoundaryWrapper
+    // Update the ref with new boundary
+    errorBoundaryWrapperRef.current = createWrappedErrorBoundary()
 
     // Return the newly created component
-    return errorBoundaryWrapper
+    return errorBoundaryWrapperRef.current
   }
+
+  const reset = useCallback(() => {
+    // create a new wrapped boundary to force a rerender
+    errorBoundaryWrapperRef.current = createWrappedErrorBoundary()
+    // Reset the hooks error state
+    dispatch({ type: "reset" })
+  }, [])
 
   // Return the wrapped ErrorBoundary class to wrap your components in plus the error state
   return {
     ErrorBoundary: getWrappedErrorBoundary(),
     didCatch: state.didCatch,
     error: state.error,
+    reset,
   }
 }
 
