@@ -1,6 +1,6 @@
 {
   "name": "use-error-boundary",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "React hook for using error boundaries",
   "source": "src/index.ts",
   "main": "lib/index.js",
@@ -37,22 +37,28 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.0.4",
-    "@testing-library/react-hooks": "^3.4.1",
-    "@types/jest": "^26.0.14",
-    "@types/react": "^16.9.49",
-    "@types/react-dom": "^16.9.8",
+    "@testing-library/react": "^12.0.0",
+    "@testing-library/react-hooks": "^7.0.1",
+    "@types/jest": "^26.0.24",
+    "@types/react": "^17.0.14",
+    "@types/react-dom": "^17.0.9",
     "eslint": "^7.9.0",
-    "jest": "^26.4.2",
+    "jest": "^27.0.6",
     "microbundle": "^0.13.3",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-test-renderer": "^16.13.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-test-renderer": "^17.0.2",
     "rimraf": "^3.0.2",
-    "ts-jest": "^26.4.0",
+    "ts-jest": "^27.0.3",
     "typescript": "^4.0.3"
   },
   "peerDependencies": {
-    "react": "^16.13.1"
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
+  },
+  "peerDependenciesMeta": {
+    "react-dom": {
+      "optional": true
+    }
   }
 }
